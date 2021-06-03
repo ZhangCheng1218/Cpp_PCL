@@ -1,0 +1,10 @@
+#include <bits/stdc++.h> 万能头文件
+#include<iostream> 输入输出流
+#include<algorithm> 算法类函数：sort()等的头文件
+#include<math.h>/<cmath> 数学函数：max(),min()等的头文件
+#include<string>/<string.h> 字符串操作的头文件
+#include<list> 链表
+#include<map>图
+#include<queue>队列
+#include<vector>迭代器
+#include<stack>栈
