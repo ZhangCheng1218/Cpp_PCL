@@ -1,0 +1,9 @@
+主要与重载有关；
+指针定义后初始化；
+void Action(int){};
+void Action(string *){};
+int main()
+{
+Action(null);//调用int
+Action(nullptr);//调用string*
+}
