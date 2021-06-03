@@ -1,5 +1,5 @@
 主要与重载有关；
-指针定义后初始化；
+指针定义后初始化，暂时为空指针；
 void Action(int){};
 void Action(string *){};
 int main()
