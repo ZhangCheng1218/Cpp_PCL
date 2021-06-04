@@ -1,0 +1,31 @@
+《RANSAC》
+随机采样一致性算法-RANdom SAmple Consensus
+该应主要是对点云进行分割；
+它可以从一组包含“局外点”的观测数据集中，通过迭代方式估计数学模型的参数。
+他是一种不确定算法，有一定的概率得出一个合理的结果；
+为了提高概率，必须提高迭代次数。
+有效数据多，无效数据占少量时候，可以通过最小二乘法或者类似方法确定模型的参数和误差；如果无效数据多（5成）最小二乘法就失效，需要新算法。
+
+
+《PCL::SACSegmentation》
+https://blog.csdn.net/u012337034/article/details/39119987
+PCL: Segmentation模块之SACSegmentation点云分割
+
+基类PCLBase派生
+PCL::SACSegmentation<PointT>sac
+成员函数：
+inline void setModelType (int model) 所提取目标模型的属性（平面、球、圆柱等等）。
+inline voidsetMethodType (int method)采样方法（RANSAC、LMedS等）。
+inline void setDistanceThreshold (doublethreshold) 查询点到目标模型的距离阈值（如果大于此阈值，则查询点不在目标模型上，默认值为0）。
+inline void setMaxIterations (intmax_iterations) 最大迭代次数（默认值为50）。
+inline void setProbability (double probability) 至少一个样本不包含离群点的概率（默认值为0.99）。
+virtual void segment (PointIndices &inliers,ModelCoefficients &model_coefficients) 输出提取点的索引和目标模型的参数。
+
+
+《KDTree》
+https://blog.csdn.net/silangquan/article/details/41483689 具体看连接
+理解：n层，n%3作为下一侧的区分标志，key；
+    一维空间 就是把数字左右分，右侧大，左侧小，一直往下分；
+    二维，先X左右分，大的往右找，小的往左，接着Y，同样右大，左小，一直循环；
+    三维，X,Y,Z的顺序，同二维；
+    建立树的时候要注意最优，最近邻法啥的；
