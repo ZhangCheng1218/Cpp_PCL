@@ -1,0 +1,59 @@
+#include <iostream>
+#include <pcl/visualization/cloud_viewer.h>
+#include <pcl/io/io.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/octree/octree.h>
+#include <boost/thread/thread.hpp>
+#include <pcl/common/common_headers.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/console/parse.h>
+#include <pcl/filters/passthrough.h>
+#include <vector>
+#include <ctime>
+ 
+using namespace std;
+ 
+int main()
+{
+    //可视化
+    pcl::visualization::CloudViewer viewer("Cloud Viewer");
+    //过滤前点云
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>());
+    //过滤后点云
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZ>());
+ 
+    //点云读入
+    if (pcl::io::loadPCDFile<pcl::PointXYZ> ("rabbit_gra.pcd", *cloud) == -1){
+            PCL_ERROR("couldn't read file");
+            return 0;
+    }
+ 
+    cerr<<"cloud before filtering"<<endl;
+    cerr<<cloud->points.size()<<endl;
+    cerr<<cloud->height<<"  "<<cloud->width<<endl;
+    for(size_t i = 0;i<5;i++)
+        cerr<<"  "<<cloud->points[i].x<<"  "<<cloud->points[i].y<<"  "<<cloud->points[i].z<<endl;
+ 
+    //直通滤波器
+    pcl::PassThrough<pcl::PointXYZ>pass;
+    pass.setInputCloud(cloud);    //输入点云
+    pass.setFilterFieldName("z");    //沿z轴过滤
+    pass.setFilterLimits(0.0,1.0);    //选取0-1之间
+//    pass.setFilterLimitsNegative(true);    //可选择0-1之间数据保留还是舍弃
+    pass.filter(*cloud_filtered);    //过滤
+ 
+ 
+ 
+    cerr<<"cloud after filtering"<<endl;
+    cerr<<cloud_filtered->points.size()<<endl;
+    for(size_t i = 0;i<5;i++)
+        cerr<<"  "<<cloud_filtered->points[i].x<<"  "<<cloud_filtered->points[i].y<<"  "<<cloud_filtered->points[i].z<<endl;
+ 
+ 
+    viewer.showCloud(cloud_filtered);
+    while(!viewer.wasStopped());
+    return 0;
+ 
+}
