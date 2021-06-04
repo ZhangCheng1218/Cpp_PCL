@@ -22,6 +22,17 @@ inline void setProbability (double probability) 至少一个样本不包含离�
 virtual void segment (PointIndices &inliers,ModelCoefficients &model_coefficients) 输出提取点的索引和目标模型的参数。
 
 
+《PCL::PassThrough》
+直通滤波，可设置保留频带内或舍弃频带内的数据
+setInputCloud(cloud) 输入点云
+setFilterFieldName("z")沿Z轴过滤
+setFilterLimits(0.0,1.0)选取0-1之间
+setFilterLimitsNegative(true)选取0-1之间数据保留还是舍弃
+filter(*cloud_)过滤
+
+
+
+
 《KDTree》
 https://blog.csdn.net/silangquan/article/details/41483689 具体看连接
 理解：n层，n%3作为下一侧的区分标志，key；
