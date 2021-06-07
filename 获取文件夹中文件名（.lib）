@@ -1,0 +1,4 @@
+Win+R -> 输入cmd，回车；
+cd /d C:\Program Files\PCL\3rdParty\VTK8\lib\release 回车；
+dir /b *.lib *>0.txt 回车；
+会在路径下创建一个0.txt，其中存储文件名；
