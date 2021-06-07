@@ -2,3 +2,94 @@ Win+R -> 输入cmd，回车；
 cd /d C:\Program Files\PCL\3rdParty\VTK8\lib\release 回车；
 dir /b *.lib *>0.txt 回车；
 会在路径下创建一个0.txt，其中存储文件名；
+
+
+
+C#
+
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+
+namespace WindowsFormsApp1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        bool _ori = false,_targ = false;
+        string _oriPath = "",_targPath="";
+     
+        private void btn_ChooseOri_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fd_Ori = new FolderBrowserDialog();
+            fd_Ori.Description = "请选择原始路径";
+            if (fd_Ori.ShowDialog ()==DialogResult.OK )
+            {
+                txtBox_OriPath.Text = fd_Ori.SelectedPath;
+                _ori = true;
+                _oriPath = fd_Ori.SelectedPath;
+            }
+
+        }
+
+        private void btn_ChooseTarg_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fd_Targ = new FolderBrowserDialog();
+            fd_Targ.Description = "请选择目标路径";
+            if (fd_Targ.ShowDialog() == DialogResult.OK)
+            {
+                txtBox_TargPath .Text = fd_Targ.SelectedPath;
+                _targ = true;
+                _targPath = fd_Targ.SelectedPath;
+            }
+        }
+
+        private void btn_Start_Click(object sender, EventArgs e)
+        {
+           
+            if (_ori &&_targ )
+            {
+
+                DirectoryInfo dirInfo = new DirectoryInfo(_oriPath);
+                FileInfo[] files = dirInfo.GetFiles();
+                List<string> s = new List<string>();
+                string[] ss;
+                foreach (var file in files)
+                {
+                    s.Add(file.ToString());
+                   
+                }
+                ss=s.ToArray();
+                WriteLog(_targPath + @"\targ.ini",ss);
+                MessageBox.Show("提取成功！");
+            }
+            else
+            {
+                MessageBox.Show("请确认路径均已选择！");
+            }
+        }
+        private void WriteLog(string filePath,string[] message) 
+        {
+
+            FileStream fs ;
+            if (!File.Exists(filePath))
+            {
+                fs = new FileStream(filePath,FileMode.Create );
+            }
+            //File.WriteAllText(filePath, message);
+            File.WriteAllLines(filePath, message);
+        }
+    }
+}
