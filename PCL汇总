@@ -8,8 +8,22 @@
 
 
 《PCL::SACSegmentation》
-https://blog.csdn.net/u012337034/article/details/39119987
+https://blog.csdn.net/zfjBIT/article/details/95047779
 PCL: Segmentation模块之SACSegmentation点云分割
+    //创建分割时所需要的模型系数对象
+	pcl::ModelCoefficients::Ptr coefficients(new  pcl::ModelCoefficients);
+	//创建存储内点的点集合索引
+	pcl::PointIndices::Ptr inliners(new pcl::PointIndices);
+	pcl::SACSegmentation<pcl::PointXYZ> seg;
+	//可选配置，设置模型系数需要优化
+	seg.setOptimizeCoefficients(true);
+	//必要配置
+	seg.setModelType(pcl::SACMODEL_PLANE);//设置模型类型
+	seg.setMethodType(pcl::SAC_RANSAC);//设置随机采样一致性方法类型
+	seg.setDistanceThreshold(0.01);	//设置距离阈值，距离阈值决定了点被认为是局内点;
+									//是必须满足的条件，表示点到估计模型的距离最大值；
+	seg.setInputCloud(cloud_projected);
+	seg.segment(*inliners,*coefficients);
 
 基类PCLBase派生
 PCL::SACSegmentation<PointT>sac
