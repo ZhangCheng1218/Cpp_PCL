@@ -44,7 +44,7 @@ int main()
    	pass.setFilterLimitsNegative(true);//取过滤带之外
     pass.filter(*cloud_filtered);    //过滤
  
- 报错：（It will be removed in PCL1.12）之类的；-----------------项目--属性--C/C++常规--SDL检查设置为 否！
+ //报错：（It will be removed in PCL1.12）之类的；-----------------项目--属性--C/C++常规--SDL检查设置为 否！
  
  
     cerr<<"cloud after filtering"<<endl;
