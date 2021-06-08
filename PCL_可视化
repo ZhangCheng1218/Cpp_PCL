@@ -1,0 +1,72 @@
+《CloudViewer简单可视化》
+#include<iostream>
+#include<pcl/io/pcd_io.h>
+#include<pcl/point_types.h>
+#include<pcl/visualization/cloud_viewer.h>
+#include<string>
+
+using namespace std;
+int main() 
+{
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(
+	new pcl::PointCloud<pcl::PointXYZ>);	
+	if (pcl::io::loadPCDFile("C:\\Users\\Administrator\\Desktop\\bc\\2021-05-17-13-50.pcd", *cloud)<0)
+	{
+		cout << "点云文件不存在！" << endl;
+		return -1;
+	} 
+	 
+	pcl::visualization::CloudViewer viewer("Cloud Viewer");
+	viewer.showCloud(cloud);
+	while (!viewer.wasStopped ())
+	{
+		cout << "->显示..." << endl;
+	}
+
+}
+
+
+
+
+《PCL_Visualizer》
+
+#include <iostream>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <boost/thread/thread.hpp>
+#include<pcl/io/pcd_io.h>
+#include<pcl/point_cloud.h>
+#include<pcl/point_types.h>
+
+using namespace std;
+
+int main() 
+{
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(
+	new pcl::PointCloud<pcl::PointXYZ>);
+	if (pcl::io::loadPCDFile("C:\\Users\\Administrator\\Desktop\\bc\\2021-05-17-13-50.pcd",*cloud)<0)
+	{
+		cout << "pcd文件不存在！" << endl;
+		return -1;
+	}
+
+	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(
+	new pcl::visualization::PCLVisualizer("3D Viewer"));
+
+	viewer->addPointCloud(cloud,"sample cloud");
+	viewer->setBackgroundColor(0,0,0);
+	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,3,"sample cloud");
+	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_COLOR,1,0,0.5,"sample cloud");
+	viewer->addCoordinateSystem(1.0);//红绿蓝-XYZ
+	while (!viewer->wasStopped() )
+	{
+		cout << "->显示..." << endl;
+		viewer->spinOnce(100);
+		boost::this_thread::sleep(boost::posix_time::microseconds(100000));
+
+	}
+
+	return 0;
+
+
+
+}
