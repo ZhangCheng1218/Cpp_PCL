@@ -1,3 +1,5 @@
+直通滤波，作用：过滤指定维度方向上（XYZ）取值不在给定范围的点；适用于消除背景，简单高效；
+
 #include <iostream>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/io/io.h>
