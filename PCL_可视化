@@ -48,10 +48,11 @@ int main()
 		cout << "pcd文件不存在！" << endl;
 		return -1;
 	}
-
+	// 创建视窗对象，并定义标题栏“3D Viewer”
+	// 等同于  pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 	boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(
 	new pcl::visualization::PCLVisualizer("3D Viewer"));
-
+	//“sample cloud”为唯一ID,多次调用addPointCloud,可以实现多个点云添加，每调用一次就创建一个新的ID;
 	viewer->addPointCloud(cloud,"sample cloud");
 	viewer->setBackgroundColor(0,0,0);
 	viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,3,"sample cloud");
