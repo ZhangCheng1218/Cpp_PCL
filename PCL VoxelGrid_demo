@@ -8,3 +8,32 @@ VoxelGrid 体素滤波
 ApproximateVoxelGrid 近似体素滤波
 通过输入的点云，创建三维体素栅格，用每个体素内用体素中所有点的中心来近似显示体素中的点
 针对数据量巨大的场景点云，比VoxelGrid方法快；
+
+#include<pcl\io\pcd_io.h>
+#include<pcl\point_cloud.h>
+#include<pcl\point_types.h>
+#include<pcl\filters\voxel_grid.h>
+#include<pcl\filters\approximate_voxel_grid.h>
+#include<boost\thread\thread.hpp>
+#include<pcl\visualization\cloud_viewer.h>
+//体素滤波
+void VoxelGrid(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	pcl::VoxelGrid<pcl::PointXYZ> sor;
+	sor.setInputCloud(cloud);
+	sor.setLeafSize(0.01f,0.01f,0.01f);
+	sor.filter(*cloud_filter);
+
+	pcl::PCDWriter writer;
+	writer.write<pcl::PointXYZ>("C:/Users/Administrator/Documents/C++_PCL/PCL_2/1/1_filter.pcd",*cloud_filter,false);
+}
+
+//近似体素滤波
+void AVoxelGrid(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	pcl::ApproximateVoxelGrid<pcl::PointXYZ> app_voxel_filter;
+	app_voxel_filter.setLeafSize(0.01,0.01,0.01);
+	app_voxel_filter.setInputCloud(cloud);
+	app_voxel_filter.filter(*cloud_filter);
+
+}
