@@ -1,6 +1,10 @@
 #include<pcl\filters\conditional_removal.h>//条件滤波
+过滤满足条件的特定数据，可以一次删除满足设定的一个或多个条件指标的所有数据点，
+删除点云中不符合用户指定的一个或多个条件的数据点，用户必须为ConditionalRemoval提供条件；
 
-
+条件类型:
+ConditionAnd;
+ConditionOr;
 //条件滤波
 void ConditionalRemoval(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
 {
