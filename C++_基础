@@ -1,0 +1,70 @@
+《atomic数据类型操作》 atomic_bool  atomic_int atomic_long等等
+所谓原子操作，表示在多个线程访问同一个全局资源的时候，能确保所有其他线程都不在同一时间内访问相同的资源
+也就是，他确保了在同一时刻只有唯一的线程对这个资源访问。
+原子操作的实现跟普通数据类型类似，但是它能够在保证正确的前提下，提供比mutex等锁机制更好的性能；
+
+#include<iostrean>
+#include<time.h>
+#include<atomic>
+#include<boost\thread\thread.hpp>
+
+using namespace std;
+long total=0;//全局的结果数据
+void click()
+{
+  for(i=0;i<1000000;++i)
+  {
+  total+=1;//无锁访问
+  }
+}
+int main(int argc,char* argv[])
+{
+  clock_t start=clock();//计时开始
+  boost::thread_group threads;//创建100个线程模拟单机统计
+  for（int i=0;i<100;++i）
+  {
+    threads.create_thread(click);
+  }
+  threads.join_all();
+  clock_t finish=clock();//计时结束
+  cout<<"结果："<<total<<endl;
+  cout<<"时间:"<<finish-start<<"ms"<<endl;
+  return 0；
+}
+
+输出：
+结果：87228056
+时间：528ms
+
+错误，结果不对；
+使用互斥对象来对全局共享资源访问进行保护
+
+long total=0;
+mutex m;
+void click()
+{
+  for(i=0;i<1000000;++i)
+  {
+  m.lock();
+  total+=1;//无锁访问
+  m.unlock();
+  }
+}
+
+输出：
+结果：100000000
+时间：8420ms
+
+时间上太长，改用原子操作；
+atomic_long total(0);
+void click()
+{
+  for(i=0;i<1000000;++i)
+  {
+  total+=1;//原子操作
+  }
+}
+
+输出：
+结果：100000000
+时间：2220ms
