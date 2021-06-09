@@ -1,0 +1,16 @@
+//半径滤波
+
+指定半径的球和内部包含的点云数，少于这个数目的删除；
+
+
+#include<pcl\filters\radius_outlier_removal.h>//半径滤波
+
+
+void RadiusOutlierRemoval(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	pcl::RadiusOutlierRemoval<pcl::PointXYZ> ror;
+	ror.setInputCloud(cloud);
+	ror.setRadiusSearch(1);		//半径1m范围找临近点
+	ror.setMinNeighborsInRadius(300);//1m内点云集合小于300删除
+	ror.filter(*cloud_filter);
+}
