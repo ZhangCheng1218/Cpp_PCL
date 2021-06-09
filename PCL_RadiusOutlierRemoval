@@ -1,7 +1,7 @@
 //半径滤波
 
 指定半径的球和内部包含的点云数，少于这个数目的删除；
-
+适合去除单个离群点，可以较好保留边界；
 
 #include<pcl\filters\radius_outlier_removal.h>//半径滤波
 
