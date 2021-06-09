@@ -1,0 +1,25 @@
+#include<pcl\filters\conditional_removal.h>//条件滤波
+
+
+//条件滤波
+void ConditionalRemoval(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	pcl::ConditionalRemoval<pcl::PointXYZ> cr;
+	cr.setInputCloud(cloud);
+
+	pcl::ConditionAnd<pcl::PointXYZ>::Ptr conditions(
+	new pcl::ConditionAnd<pcl::PointXYZ>);				//实例化条件指针
+	//添加Z轴上，大于2.5小于5的比较算子；GT:great than;LT:Lower than;
+	conditions->addComparison(pcl::FieldComparison<pcl::PointXYZ>::ConstPtr(
+	new pcl::FieldComparison<pcl::PointXYZ>("z",pcl::ComparisonOps::GT,2.5)));
+	conditions->addComparison(pcl::FieldComparison<pcl::PointXYZ>::ConstPtr(
+		new pcl::FieldComparison<pcl::PointXYZ>("z", pcl::ComparisonOps::LT, 5.0)));
+
+	cr.setCondition(conditions);
+	cr.setKeepOrganized(true);//true,保持点云结构，点的数目没有减少，采用nan代替,接下来要去除nan;
+	cr.filter(*cloud_filter);
+	//去除nan
+	std::vector<int > maping;
+	pcl::removeNaNFromPointCloud(*cloud_filter, *cloud_filter, maping);
+
+}
