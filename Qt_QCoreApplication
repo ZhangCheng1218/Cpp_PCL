@@ -1,0 +1,3 @@
+Qt,开源的C++库，主要用来开发GUI，同时也支持控制台程序开发；
+Qt控制台程序可以像GUI程序一样，支持事件循环、信号和槽的特性。
+QCoreApplication表示Qt控制台程序，QApplication和QGuiApplication表示GUI程序；
