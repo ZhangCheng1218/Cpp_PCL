@@ -1,0 +1,7 @@
+#pragma execution_character_set（“target”）
+指定目标执行字符集，目前仅支持“utf-8”目标执行集；
+#pragma execution_character_set（“utf-8”）指令指示编译器将源代码中的窄字符和窄字符串文本编码为可执行文件中的utf-8.
+VS字符集中文乱码问题：
+  #if_MSC_VER>=1600
+  #pragma execution_character_set("utf-8")
+  #endif
