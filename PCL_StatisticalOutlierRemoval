@@ -1,0 +1,10 @@
+//统计滤波
+void StatisticalOutlierRemoval(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	pcl::StatisticalOutlierRemoval <pcl::PointXYZ> sor;
+	sor.setInputCloud(cloud);
+	sor.setMeanK(100);				//统计时邻近点数
+	sor.setStddevMulThresh(1.0);		//设置判断是否为离群点的阈值，1.0表示标准差的倍数，1个标准差以上就是立群点
+	sor.filter(*cloud_filter);
+
+}
