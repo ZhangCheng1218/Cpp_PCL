@@ -1,0 +1,3 @@
+ModelOutlierRemoval
+是基于模型和点之间的距离过滤点云中的噪点
+对整个输入迭代一次，自动过滤非有限点和setSampleConsensusModelPointer()指定的模型之外的点，以及setThreholdFunctionPointer()指定的阈值；
