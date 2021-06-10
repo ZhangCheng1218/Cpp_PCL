@@ -16,6 +16,12 @@ value[5]-------------------->直线方向的Z坐标
 5.重复1-4，记录点数最多的那组直线
 #include<pcl\segmentation\sac_segmentation.h>//RANSAC 直线拟合
 #include <pcl\filters\extract_indices.h>
+
+//直线拟合
+pcl::ModelCoefficients::Ptr coefficients(
+new pcl::ModelCoefficients);
+pcl::PointIndices::Ptr inliers(
+new pcl::PointIndices);//用inliner存储直线上点的索引
 //直线拟合含显示
 void SACSegmentation(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers, double th)
 {
