@@ -7,3 +7,52 @@ value[2]-------------------->直线上一点的Z坐标
 value[3]-------------------->直线方向的X坐标
 value[4]-------------------->直线方向的Y坐标
 value[5]-------------------->直线方向的Z坐标
+
+直线拟合
+1.随机选取2个点
+2.由这两个点计算直线方程
+3.计算所有点到直线的距离
+4.得到满足条件（知道直线的距离小于预先设定的某个值）的点的数量
+5.重复1-4，记录点数最多的那组直线
+#include<pcl\segmentation\sac_segmentation.h>//RANSAC 直线拟合
+#include <pcl\filters\extract_indices.h>
+//直线拟合含显示
+void SACSegmentation(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::ModelCoefficients::Ptr coefficients, pcl::PointIndices::Ptr inliers, double th)
+{
+	pcl::SACSegmentation<pcl::PointXYZ> seg;//创建分割器
+	seg.setOptimizeCoefficients(true);//设置模板系数需要优化
+	seg.setModelType(pcl::SACMODEL_LINE);//设置目标集合状态
+	seg.setMethodType(pcl::SAC_RANSAC);//随机采样法拟合
+	seg.setDistanceThreshold(th);//设置误差容忍范围
+	seg.setMaxIterations(500);//设置最大迭代次数
+	seg.setInputCloud(cloud);
+	seg.segment(*inliers, *coefficients);//处理
+
+	cout << "-----------------拟合直线系数------------------" << endl;
+	cout << "直线上(X,Y,Z):\n("
+		<< coefficients->values[0] << ","
+		<< coefficients->values[1] << ","
+		<< coefficients->values[2] << ")"
+		<< "\n直线方向的X坐标：" << coefficients->values[3]
+		<< "\n直线方向的Y坐标：" << coefficients->values[4]
+		<< "\n直线方向的Z坐标：" << coefficients->values[5] << endl;
+
+	//直线提取
+	pcl::PointCloud<pcl::PointXYZ>::Ptr line(
+	new pcl::PointCloud<pcl::PointXYZ>);
+	pcl::ExtractIndices<pcl::PointXYZ> ex;//创建点云提取对象
+	ex.setInputCloud(cloud);
+	ex.setIndices(inliers);//设置内点作为需要提取的点集合
+	ex.setNegative(false);//false为提取内点，true为提取外点
+	ex.filter(*line);
+	//可视化
+	pcl::visualization::PCLVisualizer view;
+	view.addPointCloud(cloud,"cloud");
+	pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ>line_color(line, 255, 0, 0);
+	view.addPointCloud(line,line_color,"line");
+	view.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,1,"line");
+	view.addLine(*coefficients,"line");//可视化拟合出来的直线
+	view.spin();
+
+}
+
