@@ -59,6 +59,5 @@ void SACSegmentation(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::ModelCoef
 	view.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE,1,"line");
 	view.addLine(*coefficients,"line");//可视化拟合出来的直线
 	view.spin();
-
 }
 
