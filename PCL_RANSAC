@@ -42,7 +42,11 @@ void SACSegmentation(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud, pcl::ModelCoef
 		<< "\n直线方向的X坐标：" << coefficients->values[3]
 		<< "\n直线方向的Y坐标：" << coefficients->values[4]
 		<< "\n直线方向的Z坐标：" << coefficients->values[5] << endl;
-
+	//直线提取
+	/*for (size_t i = 0; i < inliers->indices.size(); ++i)
+	{
+		line->points.push_back(cloud->points.at(inliers->indices[i]));
+	}*/
 	//直线提取
 	pcl::PointCloud<pcl::PointXYZ>::Ptr line(
 	new pcl::PointCloud<pcl::PointXYZ>);
