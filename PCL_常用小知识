@@ -1,0 +1,128 @@
+---------------《时间计算》-----------------------
+1.利用控制台的时间计算
+    #include<pcl\console\time.h>
+    int main()
+    {
+    pcl::console::TicToc time;
+    time.tic();
+    //执行代码
+    .....    
+    cout<<time.toc()/1000<<"s"<<endl;    
+    return 0;
+    }
+    
+2.利用计时器计算时间
+    #include<ctime>
+    int main()
+    {
+    time_t begin,end;
+    begin=clock();
+    //执行代码
+    ......
+    end=clodk();
+    double Times=double(end-begin)/CLOCKS_PER_SEC;//将clock()函数的结果转化为一秒为单位的量
+    cout<<"Time:"<<Timers<<"s"<<endl;
+    return 0;
+    }
+---------------《点云里删除、添加点》-----------------------
+
+int main()
+{
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(
+		new pcl::PointCloud<pcl::PointXYZ>);
+	//处理后点云数组
+	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_projected(
+		new pcl::PointCloud<pcl::PointXYZ>);
+	//自定义点云
+	cloud->points.resize(5);
+	for (size_t i = 0; i < cloud->points.size(); ++i)
+	{
+		cloud->points[i].x = i + 1.0f;
+		cloud->points[i].y = i + 1.0f;
+		cloud->points[i].z = i + 1.0f;
+	}
+  cout << "原始数据点云：\n" << *cloud << endl;
+	cout << "五个点坐标依次为：\n" << endl;
+	for (size_t i = 0; i < cloud->size(); i++)
+	{
+		cout << "("
+			<< cloud->points[i].x <<"," 
+			<< cloud->points[i].y << ","
+			<< cloud->points[i].z << ")"			
+			<< endl;
+	}
+  
+  /*
+  pcl::PointCloud<pcl::PointXYZ>::iterator  iter = cloud->begin();
+	iter = cloud->begin() + 4;
+	cloud->erase(iter);
+	cout << "删除后结果：" << endl;
+	for (size_t i = 0; i < cloud->size(); i++)
+	{
+		cout << "("
+			<< cloud->points[i].x << ","
+			<< cloud->points[i].y << ","
+			<< cloud->points[i].z << ")"
+			<< endl;
+	}*/
+  
+  
+	pcl::PointXYZ p = {6,6,6};
+	cloud->insert(cloud->begin()+2,p);
+	cout << "插入666点后结果：" << endl;
+	for (size_t i = 0; i < cloud->size(); i++)
+	{
+		cout << "("
+			<< cloud->points[i].x << ","
+			<< cloud->points[i].y << ","
+			<< cloud->points[i].z << ")"
+			<< endl;
+	}
+
+
+
+	/*pcl::PointXYZ p = { 6,6,6 };
+	cloud->push_back(p);
+	cout << "添加666点后结果：" << endl;
+	for (size_t i = 0; i < cloud->size(); i++)
+	{
+		cout << "("
+			<< cloud->points[i].x << ","
+			<< cloud->points[i].y << ","
+			<< cloud->points[i].z << ")"
+			<< endl;
+	}*/
+return 0;
+}
+---------------《点云保存二进制(Binary)格式》-----------------------
+pcl::io::savePCDFileBinary("2.pcd",*cloud);//Binary格式的PCD文件比ASCII的占用内存小
+---------------《获取点云格式》-----------------------
+#include<pcl\PCLPointCloud2.h>
+int main()
+{
+pcl::PCLPointCloud2 cloud;
+pcl::PCDReader reader;
+reader.readHeader("1.pcd",cloud);
+for(i=0;i<cloud.fields.size();++i)
+{
+cout<<cloud.fields[i].name;
+}
+return 0;
+}
+---------------《Vector型索引转换成pcl::IndicesPtr》-----------------------
+vector<int> points_indices;//int类型的vector
+pcl::IndicesPtr indices(
+new vector<int>(points_indices));//指向Int类型的vector类的空智能指针
+---------------《计算点云中心点》-----------------------
+Eigen::Vector4f centroid;
+      compute3DCentroid(*filtered,centroid);
+---------------《删除无效点》-----------------------
+vector<int> indices;//保存去除的点的索引
+pcl::removeNaNFromPointCloud(*cloud,*cloud_filter,indices);
+---------------《由索引从原点云拷贝新点云》-----------------------
+vector<int> index={0,5,14,33};
+pcl::copyPointCloud(*cloud,index,*cloud_filter);
+
+
+
+
