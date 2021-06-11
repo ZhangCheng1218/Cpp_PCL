@@ -1,0 +1,11 @@
+1、PLY
+pcl::io::savePLYFile("1.ply",*cloud);
+2、PCD
+pcl::io::savePCDFile("1.pcd",*cloud);
+3、OBJ
+#include<pcl\io\vtk_lib_io.h>//loadPolygonFileOBJ头文件
+pcl::PolygonMesh meshData;//读取网格数据
+pcl::toPCLPointCloud2(*cloud,meshData.cloud);//将网格数据转换为点云数据
+pcl::io::saveOBJFile("1.obj",meshData);
+4、
+
