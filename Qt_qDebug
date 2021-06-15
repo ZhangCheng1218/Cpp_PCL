@@ -1,0 +1,10 @@
+使用qDebug()可以把调试信息直接输出到控制台上。
+①将字符串当做参数传给qDebug()函数；
+int x=100;
+qDebug("x:%d",x);
+②使用流输出的方法，输出多个字符串（需要添加#include<QDebug>）
+int y=250;
+qDebug<<"-----cout------"<<endl<<"x:"<<x;
+qDebug<<"y:"<<y;
+
+
