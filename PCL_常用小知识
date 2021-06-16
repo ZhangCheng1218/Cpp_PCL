@@ -122,7 +122,10 @@ pcl::removeNaNFromPointCloud(*cloud,*cloud_filter,indices);
 ---------------《由索引从原点云拷贝新点云》-----------------------
 vector<int> index={0,5,14,33};
 pcl::copyPointCloud(*cloud,index,*cloud_filter);
-
-
-
+---------------《计算点云轴向最值》-----------------------
+pcl::pointXYZ minP,maxP;
+pcl::getMinMax3D(cloud,minP,maxP);
+cloud----------点云
+minP-----------放最小值的容器（xyz)
+maxP-----------放最大值的容器（xyz)
 
