@@ -15,4 +15,48 @@
 八叉树的结构决定了八叉树具有的功能，由于每个元素都在树结构中，可以快速定位到各个元素，并且时间复杂度很小，可以用来碰撞检测、邻域检索、空间变化检测、压缩等功能。
 优点：使用八叉树可以快速进行三维目标的集合运算，如交、并、补、差等，亦可快速进行最邻近区域或点的搜素。
 缺点：存储空间消耗。
+------------------------------------------压缩------------------------------------------------------
+点云由庞大的数据集组成，这些数据集通过距离、颜色、法线等附加信息来描述空间的三维点。
+当点云需要存储或者通过速率受限制的通信进行传输，提供针对这种数据的压缩方法就十分有用。
+PCL提供了点云压缩功能，允许编码压缩所有类型的点云，包括“无序”点云，它具有无参考点和变化的点尺寸、分辨率、分布密度和点顺序等结构特征。
+底层的八叉树数据结构允许从几个输入源高效地合并点云数据。
+LOW_RES_ONLINE_COMPRESSION_WITHOUT_COLOR;---------分辨率1立方厘米，压缩完之后无颜色，快速在线编码
+LOW_RES_ONLINE_COMPRESSION_WITH_COLOR;---------分辨率1立方厘米，压缩完之后有颜色，快速在线编码
+MED_RES_ONLINE_COMPRESSION_WITHOUT_COLOR;---------分辨率5立方毫米，压缩完之后无颜色，快速在线编码
+MED_RES_ONLINE_COMPRESSION_WITH_COLOR;---------分辨率5立方毫米，压缩完之后有颜色，快速在线编码
+HIGH_RES_ONLINE_COMPRESSION_WITHOUT_COLOR;---------分辨率1立方毫米，压缩完之后无颜色，快速在线编码
+HIGH_RES_ONLINE_COMPRESSION_WITH_COLOR;---------分辨率1立方毫米，压缩完之后有颜色，快速在线编
+LOW_RES_OFFLINE_COMPRESSION_WITHOUT_COLOR;---------分辨率1立方厘米，压缩完之后无颜色，高效离线编码
+LOW_RES_OFFLINE_COMPRESSION_WITH_COLOR;---------分辨率1立方厘米，压缩完之后有颜色，高效离线编码
+MED_RES_OFFLINE_COMPRESSION_WITHOUT_COLOR;---------分辨率5立方毫米，压缩完之后无颜色，高效离线编码
+MED_RES_OFFLINE_COMPRESSION_WITH_COLOR;---------分辨率5立方毫米，压缩完之后有颜色，高效离线编码
+HIGH_RES_OFFLINE_COMPRESSION_WITHOUT_COLOR;---------分辨率1立方毫米，压缩完之后无颜色，高效离线编码
+HIGH_RES_OFFLINE_COMPRESSION_WITH_COLOR;---------分辨率1立方毫米，压缩完之后有颜色，高效离线编码
+--------------------------------------------------OctreePointCloudCompression--------------------------------------------
+OctreePointCloudCompression (compression_Profiles_e compressionProfile = MED_RES_ONLINE_COMPRESSION_WITH_COLOR,
+                               bool showStatistics = false,
+                               const double pointResolution = 0.001,
+                               const double octreeResolution = 0.01,
+                               bool doVoxelGridDownDownSampling = false,
+                               const unsigned int iFrameRate = 100,
+                               bool doColorEncoding_arg = true,
+                               const unsigned char colorBitResolution_arg = 6) :
+compressionProfile;-----------------配置文件;若要启用高级参数化应设置为MANUAL_CONFIGURATION
+showStatistics;-----------------是否将压缩相关的统计信息打印到标准输出上
+octreeResolution;-----------------八叉树分辨率
+划分八叉树时最小块，即voxel的边长；
+pointResolution;-----------------定义点坐标的编码精度，该参数应设为小于传感器精度的一个值；
+决定了点的坐标在编码时可以精确的程度，只在进行细节编码时才会生效；
+doVoxelGridDownDownSampling;-----------------是否进行体素下采样;每个体素内只留下体素中心一个点;
+为true时，对点云文件进行下采样，以体素的中心点的坐标来代替整个体素内的点的坐标，而颜色则以体素内所有点的颜色的均值为代表，此时pointResolution不会生效；
+为false时，则进行细节编码，即编码一个体素内的具体坐标和颜色，实现方式是计算体素内每个点到体素左下角的偏移量，并通过整除pointResolution来得到整数坐标，
+而颜色则需编码体素内每个点的颜色相对于平均值的残差；
+iFrameRate;-----------------点云压缩模式对点云进行差分编码压缩;用这种方法对新引入的点云和之前编码的点云之间的差分进行编码;
+以便获得最大压缩性能;iFrameRate指定了一个速率;如果数据流中的帧速率低于这个速率则不进行差分编码压缩
+iFrameRate是用来决定进行I帧编码的频率，如果数值为30，则每隔30帧进行一次I帧编码，中间帧进行P帧编码；
+doColorEncoding;-----------------是否对彩色编码压缩
+为false，不会对颜色进行编码；
+为true,但是输入的点云文件没有颜色信息，则在解码时赋予其默认值；
+colorBitResolution;-----------------定义每一个彩色成分编码后所占的位数
+
 
