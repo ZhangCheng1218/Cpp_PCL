@@ -1,0 +1,21 @@
+#include<pcl\filters\project_inliers.h>//投影滤波
+//投影滤波
+void ProjectInliers(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud,
+	pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	//使用ax+by+cz+d=0的平面模型，创建一个系数为a=b=d=0,c=1的平面，也就是X-Y平面。
+	//Z轴相关的点全部投影在X-Y面上
+	pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients());
+	coefficients->values.resize(4);
+	coefficients->values[0] = 0;
+	coefficients->values[1] = 0;
+	coefficients->values[2] = 1.0;
+	coefficients->values[3] = 0;
+	//--------------------------创建滤波器对象--------------------------
+	pcl::ProjectInliers<pcl::PointXYZ> proj;
+	proj.setInputCloud(cloud);
+	proj.setModelType(pcl::SACMODEL_PLANE);
+	proj.setModelCoefficients(coefficients);
+	proj.filter(*cloud_filter);
+
+}
