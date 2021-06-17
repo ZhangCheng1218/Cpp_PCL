@@ -1,0 +1,27 @@
+void setIndices(const IndicesConstPtr &indices)
+提供一个指向表示输入数据的索引向量指针。indices的结构就是简单的int类型的vector。
+-------------------------------定义索引---------------------------------
+std::vector<int> points_indices;-------------------int 类型的vector
+pcl::IndicesPtr indices(new std::vector<int>);-----指向int类型的vector类的空智能指针
+若要将智能指针指向定义的points_indices:
+pcl::IndicesPtr index_ptr =std::make_shared<std::vector<int>>(points_indices);
+或者：
+pcl::IndicesPtr index_ptr(new std::vector<int>(points_indices));
+---------------------------------------------------------------------
+
+#include<pcl\filters\extract_indices.h>//索引提取器
+//索引提取器
+void ExtractIndices(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud,
+	pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	cout << "提取前：" << cloud->size() << endl;
+	pcl::PointIndices indices;//创建索引
+	indices.indices.push_back(0);//添加索引
+	indices.indices.push_back(9);
+	pcl::ExtractIndices<pcl::PointXYZ> ex;//创建索引提取器
+	ex.setInputCloud(cloud);
+	ex.setIndices(std::make_shared<const pcl::PointIndices>(indices));
+	ex.filter(*cloud_filter);
+	cout << "提取后：" << cloud_filter->size() << endl;
+
+}
