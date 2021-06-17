@@ -1,0 +1,42 @@
+//点云提取子集
+void GetPoints(pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud,
+	pcl::PointCloud <pcl::PointXYZ>::Ptr& cloud_filter)
+{
+	typedef pcl::PointXYZ PointT;
+	typedef pcl::PointCloud<PointT> CloudT;
+	CloudT::Ptr cloud1(new CloudT);
+	CloudT::Ptr cloud2(new CloudT);
+  //创建模型系数
+	pcl::ModelCoefficients::Ptr coefficients(new pcl::ModelCoefficients());
+	pcl::PointIndices::Ptr inliers(new pcl::PointIndices);//内点的索引指针
+	pcl::SACSegmentation<PointT> seg;//创建分割对象
+	seg.setOptimizeCoefficients(true);
+	seg.setModelType(pcl::SACMODEL_PLANE);//面分割
+	seg.setMethodType(pcl::SAC_RANSAC);//RANSAC方法
+	seg.setMaxIterations(500);
+	seg.setDistanceThreshold(0.1);
+
+	pcl::ExtractIndices<PointT> ex;//索引提取器
+	int num = 0;
+	while (cloud_filter->points.size() > (int)0.5 * (cloud->points.size()))
+	{
+		if (num == 2)
+		{
+			break;
+		}
+		seg.setInputCloud(cloud_filter);
+		seg.segment(*inliers, *coefficients);
+		if (inliers->indices.size() == 0)
+		{
+			cout << "无内点" << endl;
+			break;
+		}
+		ex.setInputCloud(cloud_filter);
+		ex.setIndices(inliers);
+		ex.filter(*cloud_filter);
+		cout << "提取后点数：" << cloud_filter->size() << endl;
+		num++;
+
+	}
+	
+}
