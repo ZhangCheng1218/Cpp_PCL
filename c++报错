@@ -1,2 +1,3 @@
+默认库msvcrt.lib与其他库的使用冲突，请使用NODEFAULTLIB:library
 解决办法:
 工程属性->链接器->输入->忽略特定库中加入 msvcrt.lib 即可
